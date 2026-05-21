@@ -6,8 +6,8 @@ export function Datenschutz() {
         Datenschutz
       </h1>
       <p className="mt-4 max-w-xl font-display text-base leading-relaxed text-ink-soft">
-        Diese Anwendung ist ein privates Schülerprojekt und kommt ohne Anmeldung,
-        Konto oder Tracking aus.
+        Diese Anwendung ist ein privates, nicht-kommerzielles Projekt und kommt
+        ohne Anmeldung, Konto oder Tracking aus.
       </p>
 
       <div className="mt-12 space-y-10 text-ink">

@@ -82,7 +82,7 @@ export function Layout() {
 
       <footer className="relative z-10 border-t border-paper-rule bg-cream-deep/40">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-5 text-xs text-ink-muted">
-          <span className="small-caps">Privates Schülerprojekt · Nicht kommerziell</span>
+          <span className="small-caps">Privates, nicht-kommerzielles Projekt</span>
           <div className="flex gap-5">
             <Link to="/datenschutz" className="hover:text-rust hover:underline underline-offset-4">
               Datenschutz

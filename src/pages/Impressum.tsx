@@ -36,7 +36,7 @@ export function Impressum() {
           title="Hinweis zum Projekt"
           body={
             <p>
-              Diese Seite ist ein privates Schülerprojekt und wird nicht kommerziell betrieben.
+              Diese Seite ist ein privates, nicht-kommerzielles Projekt.
               Es findet keine Werbung, kein Verkauf und kein Sponsoring statt.
             </p>
           }
