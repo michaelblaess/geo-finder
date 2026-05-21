@@ -15,16 +15,16 @@ export function Impressum() {
           title="Verantwortlich für den Inhalt"
           body={
             <address className="not-italic">
-              <span className="block font-headline text-xl text-ink">Stefan Waßmann</span>
-              <span className="block">Quellweg 36A</span>
+              <span className="block font-headline text-xl text-ink">Michael Blaess</span>
+              <span className="block">Kurze Str. 2</span>
               <span className="block">15345 Rehfelde</span>
               <span className="block">Deutschland</span>
               <span className="mt-3 block">
                 <a
-                  href="mailto:st.ar.wassmann@gmx.de"
+                  href="mailto:mail@michaelblaess.de"
                   className="text-rust underline-offset-4 hover:underline"
                 >
-                  st.ar.wassmann@gmx.de
+                  mail@michaelblaess.de
                 </a>
               </span>
             </address>
@@ -33,6 +33,18 @@ export function Impressum() {
 
         <Section
           n="II"
+          title="Umsatzsteuer-ID"
+          body={
+            <p>
+              Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz:
+              <br />
+              <span className="font-headline text-ink">DE297191527</span>
+            </p>
+          }
+        />
+
+        <Section
+          n="III"
           title="Hinweis zum Projekt"
           body={
             <p>
@@ -43,7 +55,7 @@ export function Impressum() {
         />
 
         <Section
-          n="III"
+          n="IV"
           title="Haftung für Inhalte"
           body={
             <p>
@@ -57,7 +69,7 @@ export function Impressum() {
         />
 
         <Section
-          n="IV"
+          n="V"
           title="Haftung für Links"
           body={
             <p>
@@ -70,7 +82,7 @@ export function Impressum() {
         />
 
         <Section
-          n="V"
+          n="VI"
           title="Bildnachweise"
           body={
             <>
@@ -98,7 +110,7 @@ export function Impressum() {
         />
 
         <Section
-          n="VI"
+          n="VII"
           title="Schriften"
           body={
             <p>
