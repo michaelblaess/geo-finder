@@ -1,0 +1,13 @@
+node_modules
+dist
+.DS_Store
+.env
+.env.local
+.vscode
+.idea
+*.log
+
+# AI-Studio-Vorlage (verworfen, behalten zur Referenz)
+geo-finder*.zip
+geolater*.zip
+google ai studio/
