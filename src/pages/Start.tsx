@@ -65,7 +65,7 @@ export function Start() {
 
           <h1 className="animate-rise-1 mt-5 font-headline text-[16vw] leading-[0.9] sm:text-7xl lg:text-[7.5rem]">
             <span className="font-semibold text-ink">geo</span>
-            <span className="italic font-medium text-rust">later</span>
+            <span className="italic font-medium text-rust">finder</span>
             <span className="text-rust">.</span>
           </h1>
 
