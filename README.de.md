@@ -10,6 +10,22 @@
 Ein GeoGuessr-ähnliches Browser-Spiel - kostenlos, statisch, ohne Backend.
 Ein nicht-kommerzielles Projekt von Michael Blaess.
 
+## Screenshots
+
+| Start | Eine Etappe |
+|-------|-------------|
+| ![Startseite mit Schwierigkeitsauswahl](docs/screenshots/01-start.png) | ![Eine Etappe: links das Foto, rechts die Karte](docs/screenshots/02-spiel.png) |
+
+| Etappenwertung | Schlussbericht |
+|----------------|----------------|
+| ![Etappenwertung mit Distanz, Punkten und Wikipedia-Auszug](docs/screenshots/03-auswertung.png) | ![Schlussbericht mit Punktestand und Etappenbuch](docs/screenshots/04-schlussbericht.png) |
+
+![Bestenliste, ausschließlich im Browser gespeichert](docs/screenshots/05-bestenliste.png)
+
+Das Ortsfoto in den beiden Spiel-Screenshots stammt von ToucanWings,
+[CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) - siehe
+[`CREDITS.md`](./CREDITS.md).
+
 ## Status
 
 Phase 1 (MVP) und Phase 2 (Comfort + Inhalte) abgeschlossen, optionale

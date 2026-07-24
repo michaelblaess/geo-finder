@@ -10,6 +10,22 @@
 A GeoGuessr-style browser game - free, static, no backend.
 A non-commercial project by Michael Blaess.
 
+## Screenshots
+
+| Start | A round |
+|-------|---------|
+| ![Start screen with difficulty selection](docs/screenshots/01-start.png) | ![A round: photo on the left, map on the right](docs/screenshots/02-spiel.png) |
+
+| Round result | Final report |
+|--------------|--------------|
+| ![Round result with distance, points and a Wikipedia excerpt](docs/screenshots/03-auswertung.png) | ![Final report with total score and the stage log](docs/screenshots/04-schlussbericht.png) |
+
+![High-score list, stored in the browser only](docs/screenshots/05-bestenliste.png)
+
+The location photo visible in the two gameplay screenshots is by ToucanWings,
+[CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) - see
+[`CREDITS.md`](./CREDITS.md).
+
 ## Status
 
 Phase 1 (MVP) and Phase 2 (comfort + content) complete, optional background
