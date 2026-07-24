@@ -184,11 +184,24 @@ body {
   opacity: 0.05;
 }
 
-/* Topographische Linien (sehr subtil), als Hero-Hintergrund */
-.topo-bg {
+/* Ambienter Papier-Schimmer als Hero-Hintergrund.
+   Bewusst als FIXIERTES Pseudo-Element ueber den ganzen Viewport (wie
+   .paper-grain) statt als background-image am Element: ein Element-Hintergrund
+   endet an der Elementkante, und der Verlauf wird dort sichtbar abgeschnitten,
+   sobald der Inhalt kuerzer ist als der Viewport (aufgefallen bei 2560x1300).
+   z-index -1 haelt ihn hinter dem Inhalt; main hat einen eigenen
+   Stacking-Context, er kann also nicht hinter die Seite rutschen.
+   Die Verlaufsmitten liegen in den Ecken und die Groesse ist viewport-relativ,
+   damit auf breiten Schirmen ein Schimmer entsteht und kein Fleck. */
+.topo-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background-image:
-    radial-gradient(ellipse 800px 600px at 80% 20%, color-mix(in oklab, var(--color-rust) 12%, transparent), transparent 60%),
-    radial-gradient(ellipse 700px 500px at 10% 90%, color-mix(in oklab, var(--color-moss) 8%, transparent), transparent 60%);
+    radial-gradient(ellipse 70vw 75vh at 86% 2%, color-mix(in oklab, var(--color-rust) 9%, transparent), transparent 70%),
+    radial-gradient(ellipse 70vw 70vh at 2% 98%, color-mix(in oklab, var(--color-gold) 7%, transparent), transparent 70%);
 }
 
 /* Editorial-Trennlinie mit kleinem Ornament in der Mitte */
