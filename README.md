@@ -53,6 +53,20 @@ is how the hosted version gets its music.
 If no audio file is available, nothing plays and no button appears - no error
 message, no broken icon.
 
+### Known issue: no sound on older Safari (fixed)
+
+**Affected:** v0.2.0 and v0.2.1.
+
+Only OGG files were shipped. Safari supports the Ogg container from version 18.4
+onwards (macOS Sequoia 15.4, iOS 18.4, iPadOS 18.4). On older Apple devices the
+music button showed up as usual, there just was no sound: the file failed to
+load, the player silently skipped to the next track and gave up after one round.
+
+**Fixed.** `npm run fetch:music` now also downloads an MP3 for every track, and
+`src/lib/music.ts` carries a fallback chain per track (OGG first, then MP3). On
+startup the player probes each source individually and plays whichever format the
+browser supports. Details in [`public/music/README.md`](./public/music/README.md).
+
 See [`public/music/README.md`](./public/music/README.md) for how to add your own
 tracks, and [`CREDITS.md`](./CREDITS.md) for the attribution of the recordings
 used on the hosted version.

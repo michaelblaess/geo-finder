@@ -45,15 +45,24 @@ export function MusicPlayer() {
   const failCountRef = useRef(0);
   const startTrackRef = useRef<(i: number) => void>(() => {});
 
-  // Beim Mount pruefen, welche Titel real ausgeliefert werden
+  // Beim Mount pruefen, welche Titel real ausgeliefert werden. Jeder Titel hat
+  // mehrere Formate (Ogg zuerst, MP3 als Fallback fuer Safari vor 18.4). Geprueft
+  // wird JEDE Quelle, weil je nach Build auch nur eines der Formate da sein kann.
+  // Ergebnis sind Titel mit bereits aufgeloesten, real vorhandenen Quellen.
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const checks = await Promise.all(PLAYLIST.map((t) => isAvailable(resolveSrc(t.src)[0])));
+      const checks = await Promise.all(
+        PLAYLIST.map(async (t) => {
+          const urls = resolveSrc(t.src);
+          const flags = await Promise.all(urls.map(isAvailable));
+          return { ...t, src: urls.filter((_, i) => flags[i]) };
+        }),
+      );
       if (cancelled) {
         return;
       }
-      const ok = PLAYLIST.filter((_, i) => checks[i]);
+      const ok = checks.filter((t) => t.src.length > 0);
       availableRef.current = ok;
       setAvailable(ok);
       setReady(true);
@@ -77,7 +86,9 @@ export function MusicPlayer() {
     howlRef.current?.unload();
 
     const howl = new Howl({
-      src: resolveSrc(track.src),
+      // Quellen sind bereits aufgeloest und auf real vorhandene Dateien
+      // gefiltert. Howler nimmt daraus das Format, das der Browser kann.
+      src: track.src,
       // Web Audio (kein html5) fuer nahtloses Looping und exakte Lautstaerke
       html5: false,
       loop: false,

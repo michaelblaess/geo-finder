@@ -19,20 +19,25 @@ import { fileURLToPath } from "node:url";
 // https://archive.org/details/The_Four_Seasons_Vivaldi-10361
 const ARCHIVE_BASE = "https://archive.org/download/The_Four_Seasons_Vivaldi-10361";
 
-// Zuordnung: lokaler Dateiname (muss zu PLAYLIST in src/lib/music.ts passen)
-// -> Quelldateiname im Archive-Item.
+// Zwei Formate, absichtlich: Safari spielt Ogg erst ab Version 18.4
+// (macOS Sequoia 15.4, iOS 18.4). Ohne MP3 daneben bleibt das Spiel auf
+// aelteren Apple-Geraeten stumm. Howler waehlt im Browser das passende aus.
+const FORMATE = ["ogg", "mp3"];
+
+// Zuordnung: lokaler Basisname (muss zu PLAYLIST in src/lib/music.ts passen)
+// -> Basisname im Archive-Item. Die Endung kommt aus FORMATE dazu.
 const TRACKS = [
   {
-    local: "vivaldi-fruehling-1-allegro.ogg",
-    remote: "John_Harrison_with_the_Wichita_State_University_Chamber_Players_-_01_-_Spring_Mvt_1_Allegro.ogg",
+    local: "vivaldi-fruehling-1-allegro",
+    remote: "John_Harrison_with_the_Wichita_State_University_Chamber_Players_-_01_-_Spring_Mvt_1_Allegro",
   },
   {
-    local: "vivaldi-herbst-1-allegro.ogg",
-    remote: "John_Harrison_with_the_Wichita_State_University_Chamber_Players_-_07_-_Autumn_Mvt_1_Allegro.ogg",
+    local: "vivaldi-herbst-1-allegro",
+    remote: "John_Harrison_with_the_Wichita_State_University_Chamber_Players_-_07_-_Autumn_Mvt_1_Allegro",
   },
   {
-    local: "vivaldi-winter-2-largo.ogg",
-    remote: "John_Harrison_with_the_Wichita_State_University_Chamber_Players_-_11_-_Winter_Mvt_2_Largo.ogg",
+    local: "vivaldi-winter-2-largo",
+    remote: "John_Harrison_with_the_Wichita_State_University_Chamber_Players_-_11_-_Winter_Mvt_2_Largo",
   },
 ];
 
@@ -49,27 +54,29 @@ async function alreadyThere(path) {
   }
 }
 
-// Laedt einen einzelnen Titel; Fehler werden gemeldet, nicht geworfen.
-async function fetchTrack(track) {
-  const target = join(targetDir, track.local);
+// Laedt eine einzelne Datei (Titel in einem Format); Fehler werden gemeldet,
+// nicht geworfen.
+async function fetchFile(track, format) {
+  const name = `${track.local}.${format}`;
+  const target = join(targetDir, name);
   if (await alreadyThere(target)) {
-    console.log(`  uebersprungen (vorhanden): ${track.local}`);
+    console.log(`  uebersprungen (vorhanden): ${name}`);
     return true;
   }
-  const url = `${ARCHIVE_BASE}/${track.remote}`;
+  const url = `${ARCHIVE_BASE}/${track.remote}.${format}`;
   try {
     const res = await fetch(url);
     if (!res.ok) {
-      console.warn(`  WARN: ${track.local} - HTTP ${res.status}`);
+      console.warn(`  WARN: ${name} - HTTP ${res.status}`);
       return false;
     }
     const buffer = Buffer.from(await res.arrayBuffer());
     await writeFile(target, buffer);
     const kb = Math.round(buffer.length / 1024);
-    console.log(`  geladen: ${track.local} (${kb} KB)`);
+    console.log(`  geladen: ${name} (${kb} KB)`);
     return true;
   } catch (err) {
-    console.warn(`  WARN: ${track.local} - ${err.message}`);
+    console.warn(`  WARN: ${name} - ${err.message}`);
     return false;
   }
 }
@@ -79,12 +86,15 @@ async function main() {
   try {
     await mkdir(targetDir, { recursive: true });
     let ok = 0;
+    const gesamt = TRACKS.length * FORMATE.length;
     for (const track of TRACKS) {
-      if (await fetchTrack(track)) {
-        ok += 1;
+      for (const format of FORMATE) {
+        if (await fetchFile(track, format)) {
+          ok += 1;
+        }
       }
     }
-    console.log(`Fertig: ${ok}/${TRACKS.length} Titel verfuegbar.`);
+    console.log(`Fertig: ${ok}/${gesamt} Dateien verfuegbar.`);
   } catch (err) {
     // Selbst unerwartete Fehler duerfen den Build nicht kippen
     console.warn(`WARN: Musik-Fetch uebersprungen - ${err.message}`);

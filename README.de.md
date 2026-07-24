@@ -53,6 +53,21 @@ dasselbe Skript auf, so kommt die gehostete Fassung an ihre Musik.
 Ist keine Audiodatei vorhanden, wird nichts abgespielt und es erscheint kein
 Knopf - keine Fehlermeldung, kein kaputtes Symbol.
 
+### Bekanntes Problem: kein Ton auf älterem Safari (behoben)
+
+**Betroffen:** v0.2.0 und v0.2.1.
+
+Es wurden ausschließlich OGG-Dateien ausgeliefert. Safari unterstützt den
+Ogg-Container aber erst ab Version 18.4 (macOS Sequoia 15.4, iOS 18.4, iPadOS
+18.4). Auf älteren Apple-Geräten erschien der Musik-Knopf deshalb ganz normal, es
+kam nur kein Ton: Die Datei ließ sich nicht laden, der Player sprang still zum
+nächsten Titel und gab nach einer Runde auf.
+
+**Behoben.** `npm run fetch:music` holt jedes Stück jetzt zusätzlich als MP3, und
+in `src/lib/music.ts` steht pro Titel eine Fallback-Kette (OGG zuerst, dann MP3).
+Der Player prüft beim Start jede Quelle einzeln und spielt das Format, das der
+Browser beherrscht. Details in [`public/music/README.md`](./public/music/README.md).
+
 Wie Du eigene Titel einträgst, steht in
 [`public/music/README.md`](./public/music/README.md), die Nachweise der auf der
 gehosteten Fassung verwendeten Aufnahmen in [`CREDITS.md`](./CREDITS.md).

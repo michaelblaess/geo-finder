@@ -20,8 +20,21 @@ npm run fetch:music
 ```
 
 Das Script `scripts/fetch-music.mjs` lädt die in der Playlist vorgesehenen Stücke
-von ihrer frei lizenzierten Quelle (Internet Archive) hierher. Es ist idempotent
-(vorhandene Dateien werden übersprungen) und nicht-fatal.
+von ihrer frei lizenzierten Quelle (Internet Archive) hierher, **je Stück in zwei
+Formaten** (OGG und MP3). Es ist idempotent (vorhandene Dateien werden
+übersprungen) und nicht-fatal.
+
+## Warum zwei Formate
+
+Safari spielt Ogg erst ab Version 18.4 (macOS Sequoia 15.4, iOS 18.4). Ohne MP3
+daneben bleibt das Spiel auf älteren Apple-Geräten stumm, obwohl der Button
+erscheint. Deshalb steht in `src/lib/music.ts` pro Titel eine Liste von Quellen:
+OGG zuerst, MP3 als Fallback. Howler wählt daraus das Format, das der Browser
+beherrscht.
+
+Der Player prüft beim Start **jede** Quelle einzeln per HEAD-Anfrage. Ein Titel
+gilt als verfügbar, sobald mindestens ein Format ausgeliefert wird. Ein Build nur
+mit MP3 funktioniert also genauso wie einer mit beiden Formaten.
 
 Auf **GitHub Pages** läuft genau dieser Schritt im Deploy-Workflow vor dem Build
 (`.github/workflows/deploy.yml`), damit die Live-Seite Musik hat - ohne dass die
@@ -30,8 +43,9 @@ fehlt eben die Musik.
 
 ## Eigene Stücke hinzufügen
 
-1. Audiodatei als **OGG Vorbis** (ca. 128 kbit/s) hier ablegen, optional MP3 als
-   Fallback. Für nahtlose Loops die Stille am Anfang/Ende wegschneiden.
+1. Audiodatei als **OGG Vorbis** (ca. 128 kbit/s) hier ablegen und **MP3 daneben**
+   (siehe oben, sonst kein Ton auf älteren Safari-Versionen). Für nahtlose Loops
+   die Stille am Anfang und am Ende wegschneiden.
 2. Eintrag in `src/lib/music.ts` im Array `PLAYLIST` ergänzen (Dateiname unter
    `src` muss zum abgelegten Dateinamen passen).
 3. Soll die Datei beim Deploy automatisch geholt werden: Zuordnung in
