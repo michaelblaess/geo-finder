@@ -11,3 +11,8 @@ dist
 geo-finder*.zip
 geolater*.zip
 google ai studio/
+
+# Musik-Assets: nie committen. Werden zur Build-Zeit geholt
+# (npm run fetch:music). README bleibt versioniert.
+public/music/*.ogg
+public/music/*.mp3

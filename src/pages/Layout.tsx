@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { ThemeToggle } from "../components/ThemeToggle";
+import { MusicPlayer } from "../components/MusicPlayer";
 import { isDebugActive } from "../lib/debug";
 import { hasActiveGame } from "../lib/gameSession";
 
@@ -48,6 +49,9 @@ export function Layout() {
             </span>
           </Link>
 
+          <div className="flex items-center gap-1">
+            <MusicPlayer />
+
           {/* Desktop-Nav (ab sm sichtbar) */}
           <nav className="hidden items-center gap-1 text-sm sm:flex">
             {showResume ? <ResumePill /> : null}
@@ -73,6 +77,7 @@ export function Layout() {
               <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
           </button>
+          </div>
         </div>
       </header>
 

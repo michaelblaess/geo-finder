@@ -36,6 +36,10 @@ jobs:
       - name: Abhaengigkeiten installieren
         run: npm ci
 
+      - name: Musik holen (nicht-fatal)
+        run: npm run fetch:music
+        continue-on-error: true
+
       - name: Bauen
         run: npm run build
 
