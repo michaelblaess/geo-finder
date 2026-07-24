@@ -12,9 +12,9 @@ Ein nicht-kommerzielles Projekt von Michael Blaess.
 
 ## Status
 
-Phase 1 (MVP) und Phase 2 (Comfort + Inhalte) abgeschlossen. Siehe
-[`plan.md`](./plan.md) für den vollständigen Projektplan und die nächsten
-Schritte (Musik, Vercel/Supabase-Migration).
+Phase 1 (MVP) und Phase 2 (Comfort + Inhalte) abgeschlossen, optionale
+Hintergrundmusik seit v0.2.0. Siehe [`plan.md`](./plan.md) für den
+vollständigen Projektplan und die nächsten Schritte (Vercel/Supabase-Migration).
 
 ## Spielprinzip
 
@@ -23,10 +23,29 @@ Schritte (Musik, Vercel/Supabase-Migration).
 3. Je näher dein Tipp, desto mehr Punkte
 4. 5 Runden pro Spiel, am Ende dein Score auf der lokalen Highscore-Liste
 
+## Musik
+
+Das Spiel kann optional Hintergrundmusik abspielen. Sie ist standardmäßig aus
+und startet erst, wenn Du im Kopfbereich auf den Knopf "Musik" drückst -
+Browser unterbinden Autoplay ohnehin, und es soll Deine Entscheidung bleiben.
+
+**In diesem Repository liegen keine Audiodateien.** Wer das Projekt klont,
+bringt seine eigene Musik mit. `npm run fetch:music` lädt eine kleine Auswahl
+frei lizenzierter Aufnahmen nach `public/music/`; der Deploy-Workflow ruft
+dasselbe Skript auf, so kommt die gehostete Fassung an ihre Musik.
+
+Ist keine Audiodatei vorhanden, wird nichts abgespielt und es erscheint kein
+Knopf - keine Fehlermeldung, kein kaputtes Symbol.
+
+Wie Du eigene Titel einträgst, steht in
+[`public/music/README.md`](./public/music/README.md), die Nachweise der auf der
+gehosteten Fassung verwendeten Aufnahmen in [`CREDITS.md`](./CREDITS.md).
+
 ## Stack
 
 - Vite + React 19 + TypeScript + Tailwind CSS 4
 - MapLibre GL JS + OpenStreetMap-Tiles
+- Howler.js für die optionale Hintergrundmusik
 - Lokale Bilder in `public/locations/`
 - `localStorage` für Highscores und Einstellungen
 - Hosting: GitHub Pages
