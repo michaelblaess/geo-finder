@@ -49,34 +49,34 @@ export function Layout() {
             </span>
           </Link>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <MusicPlayer />
 
-          {/* Desktop-Nav (ab sm sichtbar) */}
-          <nav className="hidden items-center gap-1 text-sm sm:flex">
-            {showResume ? <ResumePill /> : null}
-            {debug ? <DebugBadge /> : null}
-            <NavItem to="/highscore">Bestenliste</NavItem>
-            <ThemeToggle />
-          </nav>
+            {/* Desktop-Nav (ab sm sichtbar) */}
+            <nav className="hidden items-center gap-1 text-sm sm:flex">
+              {showResume ? <ResumePill /> : null}
+              {debug ? <DebugBadge /> : null}
+              <NavItem to="/highscore">Bestenliste</NavItem>
+              <ThemeToggle />
+            </nav>
 
-          {/* Mobile: Hamburger-Button */}
-          <button
-            type="button"
-            onClick={() => setMenuOpen(true)}
-            aria-label="Menü öffnen"
-            className="relative inline-flex h-10 w-10 items-center justify-center text-ink-soft transition-colors hover:text-rust sm:hidden"
-          >
-            {showResume ? (
-              <span
-                aria-hidden
-                className="absolute right-1.5 top-1.5 block h-2 w-2 rounded-full bg-rust shadow-sm"
-              />
-            ) : null}
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
-              <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-          </button>
+            {/* Mobile: Hamburger-Button */}
+            <button
+              type="button"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Menü öffnen"
+              className="relative inline-flex h-10 w-10 items-center justify-center text-ink-soft transition-colors hover:text-rust sm:hidden"
+            >
+              {showResume ? (
+                <span
+                  aria-hidden
+                  className="absolute right-1.5 top-1.5 block h-2 w-2 rounded-full bg-rust shadow-sm"
+                />
+              ) : null}
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+                <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </button>
           </div>
         </div>
       </header>

@@ -146,11 +146,14 @@ export function MusicPlayer() {
       aria-pressed={playing}
       aria-label={label}
       title={label}
-      className={`inline-flex h-8 w-8 items-center justify-center transition-colors ${
-        playing ? "text-rust" : "text-ink-soft hover:text-rust"
+      className={`inline-flex items-center gap-2 border px-2.5 py-1.5 transition-colors ${
+        playing
+          ? "border-rust/50 bg-rust-soft text-rust"
+          : "border-paper-rule text-ink-soft hover:border-rust/40 hover:text-rust"
       }`}
     >
       <TaktGlyph playing={playing} />
+      <span className="small-caps text-[11px] leading-none">Musik</span>
     </button>
   );
 }
@@ -159,13 +162,13 @@ export function MusicPlayer() {
 // gestaffelten Dirigenten-Takt (Animation in index.css, Bewegungsreduktion dort
 // beruecksichtigt).
 function TaktGlyph({ playing }: { playing: boolean }) {
-  const restingScale = ["scaleY(0.4)", "scaleY(0.7)", "scaleY(0.5)"];
+  const restingScale = ["scaleY(0.4)", "scaleY(0.75)", "scaleY(0.5)"];
   return (
-    <span className="flex h-4 items-end gap-[3px]" aria-hidden>
+    <span className="flex h-3.5 items-end gap-[3px]" aria-hidden>
       {[0, 1, 2].map((i) => (
         <span
           key={i}
-          className={`h-4 w-[2px] origin-bottom bg-current ${playing ? `animate-beat-${i + 1}` : ""}`}
+          className={`h-3.5 w-[2px] origin-bottom bg-current ${playing ? `animate-beat-${i + 1}` : ""}`}
           style={playing ? undefined : { transform: restingScale[i] }}
         />
       ))}
