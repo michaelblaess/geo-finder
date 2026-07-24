@@ -44,6 +44,8 @@ export function MusicPlayer() {
   const indexRef = useRef(0);
   const failCountRef = useRef(0);
   const startTrackRef = useRef<(i: number) => void>(() => {});
+  // Bereits im Hintergrund geladener Folgetitel
+  const nextRef = useRef<{ index: number; howl: Howl } | null>(null);
 
   // Beim Mount pruefen, welche Titel real ausgeliefert werden. Jeder Titel hat
   // mehrere Formate (Ogg zuerst, MP3 als Fallback fuer Safari vor 18.4). Geprueft
@@ -72,6 +74,42 @@ export function MusicPlayer() {
     };
   }, []);
 
+  // Baut einen Howl fuer einen Titel, ohne ihn zu starten.
+  //
+  // html5: true ist hier bewusst gesetzt. Mit Web Audio laedt Howler die Datei
+  // komplett herunter und dekodiert sie, BEVOR der erste Ton kommt - bei 2 bis
+  // 3 MB je Satz eine hoerbare Wartezeit nach dem Klick. Die howler-Doku
+  // empfiehlt HTML5 Audio ausdruecklich fuer grosse Dateien, dann laeuft die
+  // Wiedergabe waehrend des Ladens an. Die Vorteile von Web Audio (nahtlose
+  // Loops, exakte Zeitsteuerung, Effekte) braucht Hintergrundmusik nicht.
+  function buildHowl(track: Track): Howl {
+    return new Howl({
+      // Quellen sind bereits aufgeloest und auf real vorhandene Dateien
+      // gefiltert. Howler nimmt daraus das Format, das der Browser kann.
+      src: track.src,
+      html5: true,
+      loop: false,
+      volume: MUSIC_VOLUME,
+    });
+  }
+
+  // Holt den naechsten Titel schon waehrend des laufenden in den Speicher,
+  // damit der Wechsel ohne Pause passiert. Howler laedt beim Erzeugen von
+  // selbst los (Option preload, Standard true).
+  function preloadNext(i: number) {
+    const list = availableRef.current;
+    const len = list.length;
+    if (len < 2) {
+      return;
+    }
+    const wrapped = ((i % len) + len) % len;
+    if (nextRef.current?.index === wrapped) {
+      return;
+    }
+    nextRef.current?.howl.unload();
+    nextRef.current = { index: wrapped, howl: buildHowl(list[wrapped]) };
+  }
+
   // Startet den Titel am (umlaufenden) Index und beginnt die Wiedergabe.
   // Bei Lade-/Wiedergabefehlern wird uebersprungen; schlagen alle fehl, stoppt es.
   const startTrack = useCallback((i: number) => {
@@ -85,21 +123,26 @@ export function MusicPlayer() {
 
     howlRef.current?.unload();
 
-    const howl = new Howl({
-      // Quellen sind bereits aufgeloest und auf real vorhandene Dateien
-      // gefiltert. Howler nimmt daraus das Format, das der Browser kann.
-      src: track.src,
-      // Web Audio (kein html5) fuer nahtloses Looping und exakte Lautstaerke
-      html5: false,
-      loop: false,
-      volume: MUSIC_VOLUME,
-      onplay: () => {
-        failCountRef.current = 0;
-      },
-      onend: () => startTrackRef.current(indexRef.current + 1),
-      onloaderror: () => advanceAfterError(wrapped),
-      onplayerror: () => advanceAfterError(wrapped),
+    // Wurde genau dieser Titel schon vorgeladen, den fertigen Howl nehmen.
+    const prepared = nextRef.current;
+    nextRef.current = null;
+    let howl: Howl;
+    if (prepared && prepared.index === wrapped) {
+      howl = prepared.howl;
+    } else {
+      prepared?.howl.unload();
+      howl = buildHowl(track);
+    }
+
+    // Handler erst hier setzen, weil ein vorgeladener Howl noch keine hat.
+    howl.off();
+    howl.on("play", () => {
+      failCountRef.current = 0;
+      preloadNext(wrapped + 1);
     });
+    howl.on("end", () => startTrackRef.current(indexRef.current + 1));
+    howl.on("loaderror", () => advanceAfterError(wrapped));
+    howl.on("playerror", () => advanceAfterError(wrapped));
 
     howlRef.current = howl;
     howl.play();
@@ -122,10 +165,11 @@ export function MusicPlayer() {
     startTrackRef.current(failedIndex + 1);
   }
 
-  // Howl beim Unmount freigeben (greift praktisch nur beim App-Ende)
+  // Howls beim Unmount freigeben (greift praktisch nur beim App-Ende)
   useEffect(() => {
     return () => {
       howlRef.current?.unload();
+      nextRef.current?.howl.unload();
     };
   }, []);
 
