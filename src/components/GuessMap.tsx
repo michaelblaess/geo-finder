@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
-import maplibregl, { type Map as MapLibreMap, type Marker, type LngLatLike } from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
+import type { Map as MapLibreMap, Marker, LngLatLike } from "maplibre-gl";
+import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import { isDebugActive } from "../lib/debug";
 
 type Props = {
@@ -22,6 +24,9 @@ type Props = {
 // ohne API-Key und ohne harte Limits. Faellt automatisch auf einen
 // einfachen OSM-Raster-Style zurueck, wenn der Vektor-Style nicht laedt.
 const OPENFREEMAP_STYLE = "https://tiles.openfreemap.org/styles/positron";
+
+// Seit maplibre-gl 6 liegt der Worker in einer eigenen Datei, die der Bundler nicht von selbst mitnimmt
+maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
 const FALLBACK_STYLE: maplibregl.StyleSpecification = {
   version: 8,
